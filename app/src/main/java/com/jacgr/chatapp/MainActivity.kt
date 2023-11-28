@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -18,6 +19,7 @@ import com.google.firebase.database.*
 import com.jacgr.chatapp.Fragmentos.FragmentoChats
 import com.jacgr.chatapp.Fragmentos.FragmentoUsuarios
 import com.jacgr.chatapp.Modelo.Usuario
+import com.jacgr.chatapp.Perfil.PerfilActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -104,6 +106,14 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId){
+            R.id.menu_perfil -> {
+                startActivity(Intent(this@MainActivity, PerfilActivity::class.java))
+                return true
+            }
+            R.id.menu_acerca_de -> {
+                Toast.makeText(this@MainActivity, "Acerca de", Toast.LENGTH_SHORT).show()
+                return true
+            }
             R.id.menu_salir -> {
                 FirebaseAuth.getInstance().signOut()
                 startActivity(Intent(this@MainActivity, Inicio::class.java))
