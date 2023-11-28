@@ -17,4 +17,9 @@
     <string name="L_Et_password">Contraseña</string>
     <string name="Btn_login">Ingresar</string>
 
+    <string name="Nombre_Usuario">Nombre de usuario</string>
+
+    <string name="Item_nombre_usuario">Nombre de usuario</string>
+    <string name="Item_email_usuario">Email de usuario</string>
+
 </resources>
