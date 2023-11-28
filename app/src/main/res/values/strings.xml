@@ -1,4 +1,20 @@
 <resources>
     <string name="app_name">ChatApp</string>
     <string name="nombre_desarrollador">Juan Cervantes</string>
+
+    <string name="Btn_ir_registro">Registrame</string>
+    <string name="Btn_ir_loggeo">Ingresar</string>
+
+    <string name="R_Et_nombre_usuario">Nombre de usuario</string>
+    <string name="R_Et_email">Correo electrónico</string>
+    <string name="R_Et_password">Contraseña</string>
+    <string name="R_Et_r_password">Repita la contraseña</string>
+    <string name="Btn_registrar">Registrar</string>
+
+    <string name="menu_salir">Cerrar Sesión</string>
+
+    <string name="L_Et_email">Correo electrónico</string>
+    <string name="L_Et_password">Contraseña</string>
+    <string name="Btn_login">Ingresar</string>
+
 </resources>

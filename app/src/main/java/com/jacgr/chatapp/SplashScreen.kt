@@ -20,7 +20,7 @@ class SplashScreen : AppCompatActivity() {
             }
 
             override fun onFinish() {
-                startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+                startActivity(Intent(this@SplashScreen, Inicio::class.java))
                 finish()
             }
 
