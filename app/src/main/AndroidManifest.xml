@@ -12,6 +12,9 @@
         android:theme="@style/Theme.ChatApp"
         tools:targetApi="31">
         <activity
+            android:name=".Perfil.EditarImagenPerfil"
+            android:exported="false" />
+        <activity
             android:name=".Perfil.PerfilActivity"
             android:exported="false" />
         <activity

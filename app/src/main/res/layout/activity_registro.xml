@@ -15,6 +15,7 @@
 
         <!-- Nombre de usuario -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -32,8 +33,10 @@
 
         <!-- Correo -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp">
 
             <EditText
                 android:id="@+id/R_Et_email"
@@ -50,8 +53,10 @@
 
         <!-- Password -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             app:passwordToggleEnabled="true">
 
             <EditText
@@ -69,8 +74,10 @@
 
         <!-- Repite password -->
         <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             app:passwordToggleEnabled="true">
 
             <EditText

@@ -86,6 +86,7 @@ class RegistroActivity : AppCompatActivity() {
                     hashMap["edad"] = ""
                     hashMap["profesion"] = ""
                     hashMap["domicilio"] = ""
+                    hashMap["telefono"] = ""
                     hashMap["estado"] = "offline"
 
                     reference.updateChildren(hashMap)
