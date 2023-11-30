@@ -13,6 +13,8 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.Continuation
 import com.google.android.gms.tasks.Task
@@ -25,6 +27,8 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
+import com.jacgr.chatapp.Adaptador.AdaptadorChat
+import com.jacgr.chatapp.Modelo.Chat
 import com.jacgr.chatapp.Modelo.Usuario
 import com.jacgr.chatapp.R
 
@@ -40,6 +44,10 @@ class MensajesActivity : AppCompatActivity() {
 
     var firebaseUser: FirebaseUser? = null
     private var imagenUri: Uri? = null
+
+    private lateinit var RV_chats: RecyclerView
+    var chatAdapter: AdaptadorChat? = null
+    var chatList: List<Chat>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,6 +128,12 @@ class MensajesActivity : AppCompatActivity() {
         IB_Enviar = findViewById(R.id.IB_Enviar)
 
         firebaseUser = FirebaseAuth.getInstance().currentUser
+
+        RV_chats = findViewById(R.id.RV_chats)
+        RV_chats.setHasFixedSize(true)
+        val linearLayoutManager = LinearLayoutManager(applicationContext)
+        linearLayoutManager.stackFromEnd = true
+        RV_chats.layoutManager = linearLayoutManager
     }
 
     private fun leerInfoUsuarioSeleccionado() {
@@ -128,12 +142,41 @@ class MensajesActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val usuario: Usuario? = snapshot.getValue(Usuario::class.java)
 
-                N_usuario_chat.text = usuario?.getN_Usuario()
+                N_usuario_chat.text = usuario!!.getN_Usuario()
 
                 Glide.with(applicationContext)
-                    .load(usuario?.getImagen())
+                    .load(usuario.getImagen())
                     .placeholder(R.drawable.ic_item_usuario)
                     .into(imagen_perfil_chat)
+
+                recuperarMensajes(firebaseUser!!.uid, uid_usuario_seleccionado, usuario.getImagen())
+
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                //
+            }
+
+        })
+    }
+
+    private fun recuperarMensajes(EmisorUid: String, ReceptorUid: String, ReceptorImagen: String?) {
+        chatList = ArrayList()
+        val reference = FirebaseDatabase.getInstance().reference.child("Chats")
+        reference.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                (chatList as ArrayList<Chat>).clear()
+                for(sn in snapshot.children){
+                    val chat = sn.getValue(Chat::class.java)
+                    if(chat?.getReceptor().equals(EmisorUid) && chat?.getEmisor().equals(ReceptorUid)
+                        || chat?.getReceptor().equals(ReceptorUid) && chat?.getEmisor().equals(EmisorUid) ){
+                        (chatList as ArrayList<Chat>).add(chat!!)
+                    }
+
+                    chatAdapter = AdaptadorChat(this@MensajesActivity, (chatList as ArrayList<Chat>), ReceptorImagen!!)
+                    RV_chats.adapter = chatAdapter
+                }
+
             }
 
             override fun onCancelled(error: DatabaseError) {
