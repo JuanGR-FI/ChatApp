@@ -1,13 +1,16 @@
 package com.jacgr.chatapp.Adaptador
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.jacgr.chatapp.Chat.MensajesActivity
 import com.jacgr.chatapp.Modelo.Usuario
 import com.jacgr.chatapp.R
 
@@ -53,6 +56,13 @@ class AdaptadorUsuario(context: Context, listaUsuarios: List<Usuario>): Recycler
             .load(usuario.getImagen())
             .placeholder(R.drawable.ic_item_usuario)
             .into(holder.imagenUsuario)
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, MensajesActivity::class.java)
+            intent.putExtra("uid_usuario", usuario.getUid())
+            Toast.makeText(context, "El usuario seleccionado es: ${usuario.getN_Usuario()}", Toast.LENGTH_SHORT).show()
+            context.startActivity(intent)
+        }
 
     }
 
