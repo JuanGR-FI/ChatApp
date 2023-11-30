@@ -168,9 +168,9 @@ class MensajesActivity : AppCompatActivity() {
                 (chatList as ArrayList<Chat>).clear()
                 for(sn in snapshot.children){
                     val chat = sn.getValue(Chat::class.java)
-                    if(chat?.getReceptor().equals(EmisorUid) && chat?.getEmisor().equals(ReceptorUid)
-                        || chat?.getReceptor().equals(ReceptorUid) && chat?.getEmisor().equals(EmisorUid) ){
-                        (chatList as ArrayList<Chat>).add(chat!!)
+                    if(chat!!.getReceptor().equals(EmisorUid) && chat.getEmisor().equals(ReceptorUid)
+                        || chat.getReceptor().equals(ReceptorUid) && chat.getEmisor().equals(EmisorUid) ){
+                        (chatList as ArrayList<Chat>).add(chat)
                     }
 
                     chatAdapter = AdaptadorChat(this@MensajesActivity, (chatList as ArrayList<Chat>), ReceptorImagen!!)

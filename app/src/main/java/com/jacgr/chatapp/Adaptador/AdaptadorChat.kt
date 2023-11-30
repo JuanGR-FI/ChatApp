@@ -93,13 +93,13 @@ class AdaptadorChat(contexto: Context, chatLista: List<Chat>, imagenUrl: String)
                     .placeholder(R.drawable.ic_imagen_enviada)
                     .into(holder.imagen_enviada_izquierdo!!)
             }
-            //Si el mensaje contiene solo texto
-            else {
-                holder.TXT_ver_mensaje?.text = chat.getMensaje()
-            }
+
 
         }
-
+        //Si el mensaje contiene solo texto
+        else {
+            holder.TXT_ver_mensaje!!.text = chat.getMensaje()
+        }
 
     }
 
