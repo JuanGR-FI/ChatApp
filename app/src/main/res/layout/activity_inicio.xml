@@ -13,15 +13,21 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <Button
+        <!--<Button
             android:id="@+id/Btn_ir_registro"
             android:text="@string/Btn_ir_registro"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"/>-->
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/Btn_ir_loggeo"
             android:text="@string/Btn_ir_loggeo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/BTN_login_google"
+            android:text="@string/BTN_login_google"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 

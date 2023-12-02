@@ -2,8 +2,8 @@
     <string name="app_name">ChatApp</string>
     <string name="nombre_desarrollador">Juan Cervantes</string>
 
-    <string name="Btn_ir_registro">Registrame</string>
-    <string name="Btn_ir_loggeo">Ingresar</string>
+    <string name="Btn_ir_loggeo">Ingresar con Email</string>
+    <string name="BTN_login_google">Ingresar con Google</string>
 
     <string name="R_Et_nombre_usuario">Nombre de usuario</string>
     <string name="R_Et_email">Correo electrónico</string>
@@ -18,6 +18,8 @@
     <string name="L_Et_email">Correo electrónico</string>
     <string name="L_Et_password">Contraseña</string>
     <string name="Btn_login">Ingresar</string>
+    <string name="TXT_no_cuenta">¿No tienes una cuenta?</string>
+    <string name="TXT_ir_registro">Registrarme</string>
 
     <string name="Nombre_Usuario">Nombre de usuario</string>
 
@@ -28,6 +30,8 @@
 
     <!-- Perfil usuario -->
     <string name="P_n_usuario">Nombre de usuario</string>
+    <string name="P_proveedor_txt">Proveedor: </string>
+    <string name="P_proveedor"> -- </string>
     <string name="P_email">Email</string>
     <string name="P_nombres">Nombres</string>
     <string name="P_apellidos">Apellidos</string>
@@ -36,6 +40,10 @@
     <string name="P_edad">Edad</string>
     <string name="P_telefono">Teléfono</string>
     <string name="Btn_guardar">Guardar</string>
+
+    <!-- Cd. Establecer telefono -->
+    <string name="Establecer_Telefono">Escriba su número</string>
+    <string name="Btn_aceptar_Telefono">Aceptar</string>
 
     <!-- Editar imagen perfil -->
     <string name="BtnElegirImagenDe">Elegir imagen de</string>
@@ -52,6 +60,5 @@
 
     <!-- Item chat -->
     <string name="TXT_ver_mensaje">Hola, ¿Cómo estás?</string>
-
 
 </resources>

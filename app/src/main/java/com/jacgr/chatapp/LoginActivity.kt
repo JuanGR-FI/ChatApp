@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 
@@ -12,6 +13,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etEmail: EditText
     private lateinit var etPassword: EditText
     private lateinit var btnLogin: Button
+    private lateinit var TXT_ir_registro: TextView
 
     private lateinit var auth: FirebaseAuth
 
@@ -24,12 +26,18 @@ class LoginActivity : AppCompatActivity() {
         btnLogin.setOnClickListener {
             validarDatos()
         }
+
+        TXT_ir_registro.setOnClickListener {
+            startActivity(Intent(this@LoginActivity, RegistroActivity::class.java))
+        }
+
     }
 
     private fun inicializarVariables() {
         etEmail = findViewById(R.id.L_Et_email)
         etPassword = findViewById(R.id.L_Et_password)
         btnLogin = findViewById(R.id.Btn_login)
+        TXT_ir_registro = findViewById(R.id.TXT_ir_registro)
 
         auth = FirebaseAuth.getInstance()
     }

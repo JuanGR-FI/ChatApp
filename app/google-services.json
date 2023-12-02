@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "746121705291",
+    "firebase_url": "https://chatapp-cf73d-default-rtdb.firebaseio.com",
     "project_id": "chatapp-cf73d",
     "storage_bucket": "chatapp-cf73d.appspot.com"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.jacgr.chatapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "746121705291-75hcc8js1c3du3vil6mghs915ltnjq22.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jacgr.chatapp",
+            "certificate_hash": "f5c0186766583cb858e83d66ad021b0571cce89c"
+          }
+        },
+        {
+          "client_id": "746121705291-8q5cddst86jlf3ekcijhua3p657jglag.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDbqkuw1cJJQ39uHpeNJaF3ebWuoOvHWvg"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746121705291-8q5cddst86jlf3ekcijhua3p657jglag.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

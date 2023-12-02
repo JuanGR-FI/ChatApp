@@ -88,6 +88,7 @@ class RegistroActivity : AppCompatActivity() {
                     hashMap["domicilio"] = ""
                     hashMap["telefono"] = ""
                     hashMap["estado"] = "offline"
+                    hashMap["proveedor"] = "Email"
 
                     reference.updateChildren(hashMap)
                         .addOnCompleteListener { task2 ->
@@ -108,11 +109,6 @@ class RegistroActivity : AppCompatActivity() {
             }.addOnFailureListener {  e ->
                 Toast.makeText(this@RegistroActivity, "${e.message}", Toast.LENGTH_SHORT).show()
             }
-
-
-
-
-
 
     }
 
