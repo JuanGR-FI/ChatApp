@@ -14,14 +14,16 @@ import com.jacgr.chatapp.Chat.MensajesActivity
 import com.jacgr.chatapp.Modelo.Usuario
 import com.jacgr.chatapp.R
 
-class AdaptadorUsuario(context: Context, listaUsuarios: List<Usuario>): RecyclerView.Adapter<AdaptadorUsuario.ViewHolder>() {
+class AdaptadorUsuario(context: Context, listaUsuarios: List<Usuario>, chatLeido: Boolean): RecyclerView.Adapter<AdaptadorUsuario.ViewHolder>() {
 
     private val context: Context
     private val listaUsuarios: List<Usuario>
+    private var chatLeido: Boolean
 
     init {
         this.context = context
         this.listaUsuarios = listaUsuarios
+        this.chatLeido = chatLeido
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){

@@ -41,9 +41,15 @@
     <string name="P_telefono">Teléfono</string>
     <string name="Btn_guardar">Guardar</string>
 
+    <string name="Btn_verificar">No verificado</string>
+
     <!-- Cd. Establecer telefono -->
     <string name="Establecer_Telefono">Escriba su número</string>
     <string name="Btn_aceptar_Telefono">Aceptar</string>
+
+    <!-- Cd. Cuenta verificada -->
+    <string name="CuentaVerificadaTXT">Cuenta verificada</string>
+    <string name="BtnEntendidoVerificado">Entendido</string>
 
     <!-- Editar imagen perfil -->
     <string name="BtnElegirImagenDe">Elegir imagen de</string>

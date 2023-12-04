@@ -1,10 +1,12 @@
 package com.jacgr.chatapp.Perfil
 
 import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
@@ -29,6 +31,7 @@ class PerfilActivity : AppCompatActivity() {
     private lateinit var Btn_guardar: Button
     private lateinit var Editar_imagen: ImageView
     private lateinit var Editar_Telefono: ImageView
+    private lateinit var Btn_verificar: MaterialButton
 
     var user: FirebaseUser? = null
     var reference: DatabaseReference? = null
@@ -37,11 +40,14 @@ class PerfilActivity : AppCompatActivity() {
     private var numeroTel = ""
     private var codigo_numero_Tel = ""
 
+    private lateinit var progressDialog: ProgressDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_perfil)
         inicializarVariables()
         obtenerDatos()
+        estadoCuenta()
 
         Btn_guardar.setOnClickListener {
             actualizarInformacion()
@@ -55,6 +61,52 @@ class PerfilActivity : AppCompatActivity() {
             establecerNumTel()
         }
 
+        Btn_verificar.setOnClickListener {
+            if(user!!.isEmailVerified){
+                //Toast.makeText(this, "Usuario verificado", Toast.LENGTH_SHORT).show()
+                cuentaVerificada()
+            }else{
+                confirmarEnvio()
+            }
+        }
+
+    }
+
+    private fun confirmarEnvio() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Verificar cuenta")
+            .setMessage("Estas seguro(a) de enviar instrucciones de verificacion a su correo electronico? ${user!!.email}")
+            .setPositiveButton("Enviar") { d, e ->
+                enviarEmailConfirmacion()
+            }
+            .setNegativeButton("Cancelar") { d, e ->
+                d.dismiss()
+            }
+            .show()
+    }
+
+    private fun enviarEmailConfirmacion() {
+        progressDialog.setMessage("Enviando instrucciones de verificacion a su correo electronico ${user!!.email}")
+        progressDialog.show()
+
+        user!!.sendEmailVerification()
+            .addOnSuccessListener {
+                //Envio fue exitoso
+                progressDialog.dismiss()
+                Toast.makeText(this, "Instrucciones enviadas, revise la bandeja de su correo ${user!!.email}", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                //Envio no fue exitoso
+                Toast.makeText(this, "La operacion fallo debido a ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    private fun estadoCuenta() {
+        if(user!!.isEmailVerified){
+            Btn_verificar.text = "Verificado"
+        }else{
+            Btn_verificar.text = "No verificado"
+        }
     }
 
     private fun establecerNumTel() {
@@ -101,6 +153,11 @@ class PerfilActivity : AppCompatActivity() {
         Btn_guardar = findViewById(R.id.Btn_guardar)
         Editar_imagen = findViewById(R.id.Editar_imagen)
         Editar_Telefono = findViewById(R.id.Editar_Telefono)
+        Btn_verificar = findViewById(R.id.Btn_verificar)
+
+        progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Espere por favor")
+        progressDialog.setCanceledOnTouchOutside(false)
 
         user = FirebaseAuth.getInstance().currentUser
         reference = FirebaseDatabase.getInstance().reference.child("Usuarios").child(user!!.uid)
@@ -143,7 +200,7 @@ class PerfilActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+                //
             }
 
         })
@@ -176,6 +233,22 @@ class PerfilActivity : AppCompatActivity() {
                 Toast.makeText(this, "Ha ocurrido un error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
 
+    }
+
+    private fun cuentaVerificada() {
+        val BtnEntendidoVerificado: MaterialButton
+        val dialog = Dialog(this)
+
+        dialog.setContentView(R.layout.cuadro_d_cuenta_verificada)
+
+        BtnEntendidoVerificado = dialog.findViewById(R.id.BtnEntendidoVerificado)
+
+        BtnEntendidoVerificado.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+        dialog.setCanceledOnTouchOutside(false)
     }
 
 }

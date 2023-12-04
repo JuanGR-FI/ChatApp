@@ -1,5 +1,6 @@
 package com.jacgr.chatapp
 
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -19,6 +20,8 @@ class RegistroActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
+
+    private lateinit var progressDialog: ProgressDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,10 @@ class RegistroActivity : AppCompatActivity() {
         btnRegistrar = findViewById(R.id.Btn_registrar)
 
         auth = FirebaseAuth.getInstance()
+
+        progressDialog = ProgressDialog(this)
+        progressDialog.setTitle("Registrando informacion")
+        progressDialog.setCanceledOnTouchOutside(false)
     }
 
     private fun validarDatos() {
@@ -65,9 +72,13 @@ class RegistroActivity : AppCompatActivity() {
     }
 
     private fun registrarUsario(email: String, password: String) {
+        progressDialog.setMessage("Espere por favor")
+        progressDialog.show()
+
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful){
+                    progressDialog.dismiss()
                     val uid = auth.currentUser!!.uid
                     reference = FirebaseDatabase.getInstance().reference.child("Usuarios").child(uid)
 
@@ -104,9 +115,11 @@ class RegistroActivity : AppCompatActivity() {
 
 
                 } else{
+                    progressDialog.dismiss()
                     Toast.makeText(this@RegistroActivity, "Ha ocurrido un error!!", Toast.LENGTH_SHORT).show()
                 }
             }.addOnFailureListener {  e ->
+                progressDialog.dismiss()
                 Toast.makeText(this@RegistroActivity, "${e.message}", Toast.LENGTH_SHORT).show()
             }
 
