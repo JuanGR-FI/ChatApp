@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.jacgr.chatapp.Fragmentos.FragmentoChats
 import com.jacgr.chatapp.Fragmentos.FragmentoUsuarios
+import com.jacgr.chatapp.Modelo.Chat
 import com.jacgr.chatapp.Modelo.Usuario
 import com.jacgr.chatapp.Perfil.PerfilActivity
 
@@ -49,13 +50,40 @@ class MainActivity : AppCompatActivity() {
         val tabLayout: TabLayout = findViewById(R.id.TabLayoutMain)
         val viewPager: ViewPager = findViewById(R.id.ViewPagerMain)
 
-        val viewpagerAdapter = ViewPagerAdapter(supportFragmentManager)
+        /*val viewpagerAdapter = ViewPagerAdapter(supportFragmentManager)
 
         viewpagerAdapter.addItem(FragmentoUsuarios(), "Usuarios")
         viewpagerAdapter.addItem(FragmentoChats(), "Chats")
 
         viewPager.adapter = viewpagerAdapter
-        tabLayout.setupWithViewPager(viewPager)
+        tabLayout.setupWithViewPager(viewPager)*/
+
+        val ref = FirebaseDatabase.getInstance().reference.child("Chats")
+        ref.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val viewpagerAdapter = ViewPagerAdapter(supportFragmentManager)
+                var contMensajesNoLeidos = 0
+                for(dataSnapshot in snapshot.children){
+                    val chat = dataSnapshot.getValue(Chat::class.java)
+                    if(chat!!.getReceptor().equals(firebaseUser!!.uid) && !chat.isVisto()){
+                        contMensajesNoLeidos++
+                    }
+                }
+                if(contMensajesNoLeidos == 0){
+                    viewpagerAdapter.addItem(FragmentoChats(), "Chats")
+                }else{
+                    viewpagerAdapter.addItem(FragmentoChats(), "[$contMensajesNoLeidos]Chats")
+                }
+                viewpagerAdapter.addItem(FragmentoUsuarios(), "Usuarios")
+                viewPager.adapter = viewpagerAdapter
+                tabLayout.setupWithViewPager(viewPager)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+        })
 
     }
 
