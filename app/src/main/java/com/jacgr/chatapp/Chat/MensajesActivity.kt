@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
@@ -49,6 +50,9 @@ class MensajesActivity : AppCompatActivity() {
     var chatAdapter: AdaptadorChat? = null
     var chatList: List<Chat>? = null
 
+    var reference: DatabaseReference? = null
+    var seenListener: ValueEventListener? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mensajes)
@@ -70,6 +74,7 @@ class MensajesActivity : AppCompatActivity() {
             }
         }
 
+        mensajeVisto(uid_usuario_seleccionado)
 
     }
 
@@ -186,6 +191,27 @@ class MensajesActivity : AppCompatActivity() {
         })
     }
 
+    private fun mensajeVisto(usuarioUid: String) {
+        reference = FirebaseDatabase.getInstance().reference.child("Chats")
+        seenListener = reference!!.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(dataSnapshot in snapshot.children){
+                    val chat = dataSnapshot.getValue(Chat::class.java)
+                    if(chat!!.getReceptor().equals(firebaseUser!!.uid) && chat.getEmisor().equals(usuarioUid)){
+                        val hashMap = HashMap<String, Any>()
+                        hashMap["visto"] = true
+                        dataSnapshot.ref.updateChildren(hashMap)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                //
+            }
+
+        })
+    }
+
     private fun abrirGaleria() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
@@ -271,5 +297,10 @@ class MensajesActivity : AppCompatActivity() {
             }
         }
     )
+
+    override fun onPause() {
+        super.onPause()
+        reference!!.removeEventListener(seenListener!!)
+    }
 
 }
