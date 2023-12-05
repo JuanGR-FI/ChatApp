@@ -5,6 +5,9 @@ import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
@@ -13,6 +16,7 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -31,6 +35,7 @@ import com.google.firebase.storage.UploadTask
 import com.jacgr.chatapp.Adaptador.AdaptadorChat
 import com.jacgr.chatapp.Modelo.Chat
 import com.jacgr.chatapp.Modelo.Usuario
+import com.jacgr.chatapp.Perfil.PerfilVisitado
 import com.jacgr.chatapp.R
 
 class MensajesActivity : AppCompatActivity() {
@@ -126,6 +131,10 @@ class MensajesActivity : AppCompatActivity() {
     }
 
     private fun inicializarVariables() {
+        val toolbar: Toolbar = findViewById(R.id.toolbar_chat)
+        setSupportActionBar(toolbar)
+        supportActionBar!!.title = ""
+
         imagen_perfil_chat = findViewById(R.id.imagen_perfil_chat)
         N_usuario_chat = findViewById(R.id.N_usuario_chat)
         Et_mensaje = findViewById(R.id.Et_mensaje)
@@ -301,6 +310,26 @@ class MensajesActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         reference!!.removeEventListener(seenListener!!)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_visitar_perfil, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId){
+            R.id.menu_visitar -> {
+                val intent = Intent(this, PerfilVisitado::class.java)
+                intent.putExtra("uid", uid_usuario_seleccionado)
+                startActivity(intent)
+
+                return true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
     }
 
 }

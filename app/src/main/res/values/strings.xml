@@ -15,6 +15,8 @@
     <string name="menu_acerca_de">Acerca de</string>
     <string name="menu_salir">Cerrar Sesión</string>
 
+    <string name="menu_visitar">Visitar perfil</string>
+
     <string name="L_Et_email">Correo electrónico</string>
     <string name="L_Et_password">Contraseña</string>
     <string name="Btn_login">Ingresar</string>
@@ -63,6 +65,30 @@
     <!-- Chat -->
     <string name="N_usuario_chat">Nombre de usuario</string>
     <string name="Et_mensaje">Escriba un mensaje</string>
+    
+    <string name="PV_Perfil_TXT">Perfil de usuario</string>
+    <string name="PV_NombreU">Nombre de usuario</string>
+    <string name="PV_EmailU">Email de usuario</string>
+    <string name="PV_Uid_TXT">Identificador: </string>
+    <string name="PV_Uid">Uid</string>
+
+    <string name="PV_nombres_TXT">Nombres: </string>
+    <string name="PV_nombres"> -- </string>
+    <string name="PV_apellidos_TXT">Apellidos: </string>
+    <string name="PV_apellidos"> -- </string>
+    <string name="PV_profesion_TXT">Profesión: </string>
+    <string name="PV_profesion"> -- </string>
+    <string name="PV_telefono_TXT">Teléfono: </string>
+    <string name="PV_telefono"> -- </string>
+    <string name="PV_edad_TXT">Edad: </string>
+    <string name="PV_edad"> -- </string>
+    <string name="PV_domicilio_TXT">Domicilio: </string>
+    <string name="PV_domicilio"> -- </string>
+    <string name="PV_proveedor_TXT">Proveedor: </string>
+    <string name="PV_proveedor"> -- </string>
+    
+    <string name="Btn_llamar">Llamar</string>
+    <string name="Btn_enviar_sms">Enviar sms</string>
 
     <!-- Item chat -->
     <string name="TXT_ver_mensaje">Hola, ¿Cómo estás?</string>
