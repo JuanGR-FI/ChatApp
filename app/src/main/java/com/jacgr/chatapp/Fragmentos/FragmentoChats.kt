@@ -1,6 +1,7 @@
 package com.jacgr.chatapp.Fragmentos
 
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +14,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.jacgr.chatapp.Adaptador.AdaptadorUsuario
 import com.jacgr.chatapp.Modelo.ListaChats
 import com.jacgr.chatapp.Modelo.Usuario
+import com.jacgr.chatapp.Notificaciones.Token
 import com.jacgr.chatapp.R
 
 class FragmentoChats : Fragment() {
@@ -58,7 +61,23 @@ class FragmentoChats : Fragment() {
 
         })
 
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { tarea ->
+                if(tarea.isSuccessful){
+                    if(tarea.result != null && !TextUtils.isEmpty(tarea.result)){
+                        val token: String = tarea.result!!
+                        ActualizarToken(token)
+                    }
+                }
+            }
+
         return view
+    }
+
+    private fun ActualizarToken(token: String) {
+        val reference = FirebaseDatabase.getInstance().reference.child("Tokens")
+        val token1 = Token(token)
+        reference.child(firebaseUser!!.uid).setValue(token1)
     }
 
     private fun recuperarListaChats() {

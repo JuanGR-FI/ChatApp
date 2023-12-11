@@ -35,8 +35,12 @@ import com.google.firebase.storage.UploadTask
 import com.jacgr.chatapp.Adaptador.AdaptadorChat
 import com.jacgr.chatapp.Modelo.Chat
 import com.jacgr.chatapp.Modelo.Usuario
+import com.jacgr.chatapp.Notificaciones.*
 import com.jacgr.chatapp.Perfil.PerfilVisitado
 import com.jacgr.chatapp.R
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MensajesActivity : AppCompatActivity() {
 
@@ -58,6 +62,10 @@ class MensajesActivity : AppCompatActivity() {
     var reference: DatabaseReference? = null
     var seenListener: ValueEventListener? = null
 
+    var notificar = false
+    var apiService: APIService? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mensajes)
@@ -66,10 +74,13 @@ class MensajesActivity : AppCompatActivity() {
         leerInfoUsuarioSeleccionado()
 
         IB_Adjuntar.setOnClickListener {
+            notificar = true
             abrirGaleria()
         }
 
         IB_Enviar.setOnClickListener {
+            notificar = true
+
             val mensaje = Et_mensaje.text.toString()
             if(mensaje.isEmpty()){
                 Toast.makeText(this, "Por favor ingrese un mensaje", Toast.LENGTH_SHORT).show()
@@ -128,12 +139,80 @@ class MensajesActivity : AppCompatActivity() {
                 }
             }
 
+        val usuarioReference = FirebaseDatabase.getInstance().reference
+            .child("Usuarios").child(firebaseUser!!.uid)
+        usuarioReference.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val usuario = snapshot.getValue(Usuario::class.java)
+                if(notificar){
+                    enviarNotificacion(uid_receptor, usuario!!.getN_Usuario(), mensaje)
+                }
+                notificar = false
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+
+    }
+
+    private fun enviarNotificacion(uidReceptor: String, nUsuario: String?, mensaje: String) {
+        val reference = FirebaseDatabase.getInstance().reference.child("Tokens")
+        val query = reference.orderByKey().equalTo(uidReceptor)
+
+        query.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for(dataSnapshot in snapshot.children){
+                    val token: Token? = dataSnapshot.getValue(Token::class.java)
+
+                    val data = Data(
+                        firebaseUser!!.uid,
+                        R.mipmap.ic_chat,
+                        "$nUsuario: $mensaje",
+                        "Nuevo mensaje",
+                        uid_usuario_seleccionado
+                    )
+
+                    val sender = Sender(data, token!!.getToken().toString())
+
+                    apiService!!.sendNotification(sender)
+                        .enqueue(object : Callback<MyResponse>{
+                            override fun onResponse(
+                                call: Call<MyResponse>,
+                                response: Response<MyResponse>
+                            ) {
+                                if(response.code() == 200){
+                                    if(response.body()!!.success != 1){
+                                        Toast.makeText(this@MensajesActivity, "Algo ha salido mal", Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
+
+                            override fun onFailure(call: Call<MyResponse>, t: Throwable) {
+                                TODO("Not yet implemented")
+                            }
+
+                        })
+
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
     }
 
     private fun inicializarVariables() {
         val toolbar: Toolbar = findViewById(R.id.toolbar_chat)
         setSupportActionBar(toolbar)
         supportActionBar!!.title = ""
+
+        apiService = Client.Client.getClient("https://fcm.googleapis.com/")!!.create(APIService::class.java)
 
         imagen_perfil_chat = findViewById(R.id.imagen_perfil_chat)
         N_usuario_chat = findViewById(R.id.N_usuario_chat)
@@ -266,6 +345,30 @@ class MensajesActivity : AppCompatActivity() {
                         infoMensajeImagen["mensaje"] = "Se ha enviado la imagen"
                         infoMensajeImagen["url"] = url
                         infoMensajeImagen["visto"] = false
+
+                        reference.child("Chats").child(idMensaje!!).setValue(infoMensajeImagen)
+                            .addOnCompleteListener { tarea ->
+                                if(tarea.isSuccessful){
+                                    val usuarioReference = FirebaseDatabase.getInstance().reference
+                                        .child("Usuarios").child(firebaseUser!!.uid)
+                                    usuarioReference.addValueEventListener(object: ValueEventListener{
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            val usuario = snapshot.getValue(Usuario::class.java)
+                                            if(notificar){
+                                                enviarNotificacion(uid_usuario_seleccionado,
+                                                    usuario!!.getN_Usuario(),
+                                                    "Se ha enviado la imagen")
+                                            }
+                                            notificar = false
+                                        }
+
+                                        override fun onCancelled(error: DatabaseError) {
+                                            TODO("Not yet implemented")
+                                        }
+
+                                    })
+                                }
+                            }
 
                         reference.child("Chats").child(idMensaje!!).setValue(infoMensajeImagen)
                             .addOnCompleteListener { tarea ->
